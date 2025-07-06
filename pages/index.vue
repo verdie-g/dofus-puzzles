@@ -18,5 +18,12 @@ const puzzle: Puzzle = {
 <template>
   <h1>Dofus Puzzles</h1>
   <h2>Find the closest position to bring the enemy in sight.</h2>
-  <Map :puzzle="puzzle" :line-of-sight="true" @puzzle-completed="(x) => console.log(x)" />
+  <Map :puzzle="puzzle" :line-of-sight="true" @puzzle-completed="(x) => console.log(x)" class="map" />
 </template>
+
+<style scoped>
+.map {
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

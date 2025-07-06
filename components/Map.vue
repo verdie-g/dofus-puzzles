@@ -15,17 +15,60 @@ const emit = defineEmits<{
   puzzleCompleted: [puzzleResult: string]
 }>()
 
-let hoveredCellId: Ref<number | null> = ref(null);
-let hoveredCellLineOfSight: Ref<Set<number> | null> = ref(null);
-let movementPath: Ref<Set<number> | null> = ref(null);
+const hoveredCellId: Ref<number | null> = ref(null);
+const hoveredCellLineOfSight: Ref<Set<number> | null> = ref(null);
+const movementPath: Ref<Set<number> | null> = ref(null);
+const gridRef: Ref<HTMLDivElement | null> = ref(null);
 
 const movementPoints = 5;
 const rows = MAP_HORIZONTAL_CELLS_COUNT + MAP_VERTICAL_CELLS_COUNT;
 const cols = MAP_HORIZONTAL_CELLS_COUNT + MAP_VERTICAL_CELLS_COUNT - 1;
-const gridStyle = {
-  'grid-template-rows': `repeat(${rows}, 80px)`,
-  'grid-template-columns': `repeat(${cols}, 80px)`,
-};
+
+const gridStyle = computed(() => {
+  const xRotation = 1.0472; // 60deg
+  const zRotation = 0.785398; // 45deg
+
+  let top = 0;
+  let left = 0;
+  let width = 0;
+  let height = 0;
+  if (gridRef.value !== null) {
+    const originalWidth = gridRef.value.scrollWidth;
+    const originalHeight = gridRef.value.scrollHeight;
+    console.log(originalWidth)
+
+    const topRightPoint: Point = [originalWidth / 2.0, originalHeight / 2.0];
+    const topLeftPoint: Point = [-originalWidth / 2.0, originalHeight / 2.0];
+
+    const rotatedTopRightPoint = pointRotateX(pointRotateZ(topRightPoint, zRotation), xRotation);
+    const rotatedTopLeftPoint = pointRotateX(pointRotateZ(topLeftPoint, zRotation), xRotation);
+
+    top = rotatedTopRightPoint[1] - topRightPoint[1];
+    left = topLeftPoint[0] - rotatedTopLeftPoint[0];
+
+    const cellRect = gridRef.value.children[0].getBoundingClientRect();
+    top -= cellRect.height * (MAP_HORIZONTAL_CELLS_COUNT - 1) / 2.0;
+    left -= cellRect.width * (MAP_VERTICAL_CELLS_COUNT - 1) / 2.0;
+
+    width = cellRect.width * (MAP_HORIZONTAL_CELLS_COUNT + 0.5);
+    height = cellRect.height * (MAP_VERTICAL_CELLS_COUNT + 0.5);
+  }
+
+  console.log(width);
+  return {
+    wrapper: {
+      width: `${width}px`,
+      height: `${height}px`,
+    },
+    grid: {
+      transform: `rotateX(${xRotation}rad) rotateZ(-${zRotation}rad)`,
+      top: `${top}px`,
+      left: `${left}px`,
+      'grid-template-rows': `repeat(${rows}, var(--cell-size))`,
+      'grid-template-columns': `repeat(${cols}, var(--cell-size))`,
+    },
+  }
+});
 
 function resolveCellPosition(cellId: number) {
   const row = Math.round(cellId / (2 * MAP_HORIZONTAL_CELLS_COUNT)) + cellId % MAP_HORIZONTAL_CELLS_COUNT + 1;
@@ -111,8 +154,8 @@ function onCellClick(evt: MouseEvent) {
 </script>
 
 <template>
-  <div class="grid-wrapper">
-    <div class="grid" :style="gridStyle">
+  <div class="grid-wrapper" :style="gridStyle.wrapper">
+    <div class="grid" ref="gridRef" :style="gridStyle.grid">
       <div v-for="(cell, cellId) in props.puzzle.map.cells"
            class="cell"
            :data-cellid="cellId"
@@ -137,23 +180,20 @@ function onCellClick(evt: MouseEvent) {
   </div>
 </template>
 
-<style>
+<style scoped>
 .grid-wrapper {
   overflow: hidden;
+  position: relative;
+  --cell-size: 48px
 }
 
 .grid {
+  position: absolute;
   display: grid;
   gap: 0;
-  transform: rotateX(60deg) rotateZ(-45deg);
-  /* These margins could probably be computed somehow */
-  margin-top: -864px;
-  margin-left: -567px;
-  margin-bottom: -519px;
 }
 
 .cell-floor {
-  border: 1px solid #726c50;
   cursor: pointer;
 }
 
@@ -182,22 +222,22 @@ function onCellClick(evt: MouseEvent) {
 .cell-wall-top {
   width: 100%;
   height: 100%;
-  bottom: 40px;
-  left: 40px;
+  bottom: calc(var(--cell-size) / 2.0);
+  left: calc(var(--cell-size) / 2.0);
 }
 
 .cell-wall-left {
-  width: 40px;
-  height: 80px;
-  top: -20px;
+  width: calc(var(--cell-size) / 2.0);
+  height: var(--cell-size);
+  top: calc(var(--cell-size) / -4.0);
   transform: skew(0deg, -45deg);
 }
 
 .cell-wall-right {
-  width: 80px;
-  height: 40px;
-  top: 40px;
-  left: 20px;
+  width: var(--cell-size);
+  height: calc(var(--cell-size) / 2.0);
+  top: calc(var(--cell-size) / 2.0);
+  left: calc(var(--cell-size) / 4.0);
   transform: skew(-45deg, 0deg);
 }
 
