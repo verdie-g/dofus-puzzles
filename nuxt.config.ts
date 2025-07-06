@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: '2024-11-27',
   app: {
     head: {
       title: 'Dofus Puzzles',
@@ -19,8 +19,12 @@ export default defineNuxtConfig({
   typescript: {
     typeCheck: true,
   },
-  modules: ['@nuxt/ui'],
-  css: [
-    '@/assets/css/main.css',
+  modules: [
+    '@nuxt/ui',
+    '@nuxt/eslint'
   ],
-})
+  css: ['~/assets/css/main.css'],
+  future: {
+    compatibilityVersion: 4
+  },
+});

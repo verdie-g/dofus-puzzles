@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Cell } from '@/models/map';
-import { type Puzzle, MapEntityType } from '@/models/puzzle';
+import {  MapEntityType } from '@/models/puzzle';
+import type {Puzzle} from '@/models/puzzle';
 import { MAP_HORIZONTAL_CELLS_COUNT, MAP_VERTICAL_CELLS_COUNT } from '@/services/map-service';
 import { resolveLineOfSight, findShortestPath, findWinningCells} from '@/services/puzzle-service';
 
@@ -46,7 +47,7 @@ const gridStyle = computed(() => {
     top = rotatedTopRightPoint[1] - topRightPoint[1];
     left = topLeftPoint[0] - rotatedTopLeftPoint[0];
 
-    const cellRect = gridRef.value.children[0].getBoundingClientRect();
+    const cellRect = gridRef.value.children[0]!.getBoundingClientRect();
     top -= cellRect.height * (MAP_HORIZONTAL_CELLS_COUNT - 1) / 2.0;
     left -= cellRect.width * (MAP_VERTICAL_CELLS_COUNT - 1) / 2.0;
 
@@ -111,7 +112,7 @@ function cellHasEntityType(cellId: number, type: MapEntityType) {
 }
 
 function getCellIdFromMouseEvent(evt: MouseEvent) {
-  const target = (<HTMLCanvasElement>evt.target);
+  const target = evt.target as HTMLCanvasElement;
   return parseInt(target.dataset.cellid!, 10);
 }
 
@@ -120,7 +121,7 @@ function onCellOverEnter(evt: MouseEvent) {
   hoveredCellId.value = cellId;
   hoveredCellLineOfSight.value = new Set(resolveLineOfSight(cellId, props.puzzle));
 
-  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0].cellId;
+  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0]!.cellId;
   const path = findShortestPath(allyCellId, cellId, props.puzzle);
   movementPath.value = path === null || path.length > movementPoints ? null : new Set(path);
 }
@@ -134,7 +135,7 @@ function onCellOverLeave(_: MouseEvent) {
 function onCellClick(evt: MouseEvent) {
   const targetCellId = getCellIdFromMouseEvent(evt);
 
-  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0].cellId;
+  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0]!.cellId;
   const path = findShortestPath(allyCellId, targetCellId, props.puzzle);
   if (path === null || path.length > movementPoints) {
     // Don't make the player lose for a click on an unreachable cells.
@@ -154,8 +155,10 @@ function onCellClick(evt: MouseEvent) {
 
 <template>
   <div class="grid-wrapper" :style="gridStyle.wrapper">
-    <div class="grid" ref="gridRef" :style="gridStyle.grid">
-      <div v-for="(cell, cellId) in props.puzzle.map.cells"
+    <div ref="gridRef" class="grid" :style="gridStyle.grid">
+      <div
+v-for="(cell, cellId) in props.puzzle.map.cells"
+           :key="cellId"
            class="cell"
            :data-cellid="cellId"
            :class="getCellClasses(cellId)"
@@ -164,17 +167,17 @@ function onCellClick(evt: MouseEvent) {
            @mouseleave="onCellOverLeave"
            @click="onCellClick">
         <template v-if="cell === 3">
-            <div class="cell-wall-left"></div>
-            <div class="cell-wall-top"></div>
-            <div class="cell-wall-right"></div>
+            <div class="cell-wall-left"/>
+            <div class="cell-wall-top"/>
+            <div class="cell-wall-right"/>
         </template>
 
-        <div v-if="cellHasEntityType(cellId, MapEntityType.Ally)" class="cell-ally"></div>
-        <div v-else-if="cellHasEntityType(cellId, MapEntityType.Obstacle)" class="cell-obstacle"></div>
-        <div v-else-if="cellHasEntityType(cellId, MapEntityType.Enemy)" class="cell-enemy"></div>
-        <div v-else-if="movementPath?.has(cellId)" class="cell-move"></div>
-        <div v-else-if="props.showWinningCells && winningCells.includes(cellId)" class="cell-win"></div>
-        <div v-else-if="hoveredCellId === cellId" class="cell-hovered"></div>
+        <div v-if="cellHasEntityType(cellId, MapEntityType.Ally)" class="cell-ally"/>
+        <div v-else-if="cellHasEntityType(cellId, MapEntityType.Obstacle)" class="cell-obstacle"/>
+        <div v-else-if="cellHasEntityType(cellId, MapEntityType.Enemy)" class="cell-enemy"/>
+        <div v-else-if="movementPath?.has(cellId)" class="cell-move"/>
+        <div v-else-if="props.showWinningCells && winningCells.includes(cellId)" class="cell-win"/>
+        <div v-else-if="hoveredCellId === cellId" class="cell-hovered"/>
       </div>
     </div>
   </div>
@@ -184,7 +187,7 @@ function onCellClick(evt: MouseEvent) {
 .grid-wrapper {
   overflow: hidden;
   position: relative;
-  --cell-size: 48px
+  --cell-size: 3rem;
 }
 
 .grid {
@@ -281,6 +284,6 @@ function onCellClick(evt: MouseEvent) {
 }
 
 .cell-win {
-  background-color: #317105
+  background-color: var(--ui-success);
 }
 </style>

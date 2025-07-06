@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { MapEntityType, type Puzzle } from '@/models/puzzle';
+import { MapEntityType } from '@/models/puzzle';
+import type { Puzzle } from '@/models/puzzle';
 
 const puzzle: Puzzle = {
   name: 'test',
@@ -16,14 +17,17 @@ const puzzle: Puzzle = {
 </script>
 
 <template>
-  <h1>Dofus Puzzles</h1>
-  <h2>Find the closest position to bring the enemy in sight.</h2>
-  <Map :puzzle="puzzle" :line-of-sight="true" @puzzle-completed="(x) => console.log(x)" class="map" />
+  <div>
+    <UContainer>
+      <p class="text-xl text-center">
+        Déplacez-<span class="text-[#15518F]">vous</span> sur la position la plus proche pour avoir l'<span class="text-[#eb2b2b]">ennemi</span>
+        en ligne de mire sans être gêné par les <span class="text-[#60314f]">obstacles</span>.
+      </p>
+      <div class="my-2 flex justify-center">
+        <UButton trailing-icon="i-lucide-arrow-right" size="md" color="success">Suivant</UButton>
+        <UButton trailing-icon="i-lucide-undo-2" size="md" color="error">Retry</UButton>
+      </div>
+    </UContainer>
+    <PuzzleMap :puzzle="puzzle" :show-line-of-sight="true" :show-winning-cells="true" class="mx-auto my-4" @puzzle-completed="(x) => console.log(x)" />
+  </div>
 </template>
-
-<style scoped>
-.map {
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>

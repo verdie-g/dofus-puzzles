@@ -1,6 +1,8 @@
-import { MapEntityType, type Puzzle } from '@/models/puzzle';
+import { MapEntityType  } from '@/models/puzzle';
+import type {Puzzle} from '@/models/puzzle';
 import { MAP_CELLS_COUNT, MAP_HORIZONTAL_CELLS_COUNT, isPointInMap, isValidCellId, mapPointFromCellId, mapPointFromCoordinates, pointDistance, pointLos } from './map-service';
-import { Cell, type MapPoint } from '~/models/map';
+import { Cell } from '~/models/map';
+import type { MapPoint } from '~/models/map';
 
 export function resolveLineOfSight(refCellId: number, puzzle: Puzzle) : number[] {
     const refPos = mapPointFromCellId(refCellId);
@@ -33,14 +35,14 @@ export function resolveLineOfSight(refCellId: number, puzzle: Puzzle) : number[]
 
         let los = true;
         for (let i = 0; i < line.length; i++) {
-            const currentPoint = line[i];
+            const currentPoint = line[i]!;
             if (!isPointInMap(currentPoint)) {
                 continue;
             }
 
             if (
                 i > 0 &&
-                puzzle.entities.find(e => e.cellId === line[i - 1].cellId) !== undefined
+                puzzle.entities.find(e => e.cellId === line[i - 1]!.cellId) !== undefined
             ) {
                 los = false;
             } else if (
@@ -74,8 +76,8 @@ export function isCellAccessible(cellId: number, puzzle: Puzzle) {
 }
 
 export function findWinningCells(maxMovementPoints: number, puzzle: Puzzle) {
-    const allyCellId = puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0].cellId;
-    const enemyCellId = puzzle.entities.filter(e => e.type == MapEntityType.Enemy)[0].cellId;
+    const allyCellId = puzzle.entities.find(e => e.type == MapEntityType.Ally)!.cellId;
+    const enemyCellId = puzzle.entities.find(e => e.type == MapEntityType.Enemy)!.cellId;
     const enemyLineOfSight = resolveLineOfSight(enemyCellId, puzzle);
 
     const winningCells = [];
@@ -122,7 +124,7 @@ function findShortestPathRec(fromPoint: MapPoint, toPoint: MapPoint, puzzle: Puz
 
     while (toVisit.length > 0) {
         const path = toVisit.shift()!;
-        const current = path[path.length - 1];
+        const current = path[path.length - 1]!;
 
         if (current.cellId === toPoint.cellId) {
             return path;

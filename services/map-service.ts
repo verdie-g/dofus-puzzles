@@ -1,4 +1,5 @@
-import { Cell, type Map as DfsMap, type MapPoint } from '@/models/map';
+import { Cell } from '@/models/map';
+import type { Map, MapPoint } from '@/models/map';
 
 export const MAP_CELLS_COUNT = 560;
 export const MAP_HORIZONTAL_CELLS_COUNT = 14;
@@ -53,7 +54,7 @@ export function isValidCellId(cellId: number) {
     return cellId >= 0 && cellId < MAP_CELLS_COUNT;
 }
 
-export function pointLos(map: DfsMap, point: MapPoint): boolean {
+export function pointLos(map: Map, point: MapPoint): boolean {
     return map.cells[point.cellId] !== Cell.Wall;
 }
 
