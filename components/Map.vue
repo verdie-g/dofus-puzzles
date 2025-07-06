@@ -6,14 +6,15 @@ import { resolveLineOfSight, findShortestPath, findWinningCells} from '@/service
 
 interface Props {
   puzzle: Puzzle;
-  lineOfSight: boolean;
+  showLineOfSight: boolean;
+  showWinningCells: boolean;
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
   puzzleCompleted: [puzzleResult: string]
-}>()
+}>();
 
 const hoveredCellId: Ref<number | null> = ref(null);
 const hoveredCellLineOfSight: Ref<Set<number> | null> = ref(null);
@@ -35,7 +36,6 @@ const gridStyle = computed(() => {
   if (gridRef.value !== null) {
     const originalWidth = gridRef.value.scrollWidth;
     const originalHeight = gridRef.value.scrollHeight;
-    console.log(originalWidth)
 
     const topRightPoint: Point = [originalWidth / 2.0, originalHeight / 2.0];
     const topLeftPoint: Point = [-originalWidth / 2.0, originalHeight / 2.0];
@@ -54,7 +54,6 @@ const gridStyle = computed(() => {
     height = cellRect.height * (MAP_VERTICAL_CELLS_COUNT + 0.5);
   }
 
-  console.log(width);
   return {
     wrapper: {
       width: `${width}px`,
@@ -69,6 +68,8 @@ const gridStyle = computed(() => {
     },
   }
 });
+
+const winningCells = computed(() => findWinningCells(movementPoints, props.puzzle));
 
 function resolveCellPosition(cellId: number) {
   const row = Math.round(cellId / (2 * MAP_HORIZONTAL_CELLS_COUNT)) + cellId % MAP_HORIZONTAL_CELLS_COUNT + 1;
@@ -86,7 +87,7 @@ function getCellClasses(cellId: number) {
     const [row, col] = resolveCellPosition(cellId); 
     classes.push(((row + col) % 2) === 0 ? 'cell-even' : 'cell-odd');
   
-    if (props.lineOfSight && hoveredCellLineOfSight.value !== null && !hoveredCellLineOfSight.value.has(cellId)) {
+    if (props.showLineOfSight && hoveredCellLineOfSight.value !== null && !hoveredCellLineOfSight.value.has(cellId)) {
       classes.push('cell-fog');
     }
   }
@@ -140,10 +141,8 @@ function onCellClick(evt: MouseEvent) {
     return;
   }
 
-  const winningCells = findWinningCells(movementPoints, props.puzzle);
-
   let puzzleResult;
-  if (winningCells.includes(targetCellId)) {
+  if (winningCells.value.includes(targetCellId)) {
     puzzleResult = 'WON';
   } else {
     puzzleResult = 'LOST';
@@ -174,6 +173,7 @@ function onCellClick(evt: MouseEvent) {
         <div v-else-if="cellHasEntityType(cellId, MapEntityType.Obstacle)" class="cell-obstacle"></div>
         <div v-else-if="cellHasEntityType(cellId, MapEntityType.Enemy)" class="cell-enemy"></div>
         <div v-else-if="movementPath?.has(cellId)" class="cell-move"></div>
+        <div v-else-if="props.showWinningCells && winningCells.includes(cellId)" class="cell-win"></div>
         <div v-else-if="hoveredCellId === cellId" class="cell-hovered"></div>
       </div>
     </div>
@@ -245,7 +245,8 @@ function onCellClick(evt: MouseEvent) {
 .cell-ally,
 .cell-enemy,
 .cell-obstacle,
-.cell-move {
+.cell-move,
+.cell-win {
   width: 100%;
   height: 100%;
   /* Prevents flickering on hover */
@@ -256,7 +257,6 @@ function onCellClick(evt: MouseEvent) {
 .cell-ally,
 .cell-enemy,
 .cell-obstacle {
-  background-color: transparent;
   box-shadow: inset 0px 0px 13px 5px;
 }
 
@@ -278,5 +278,9 @@ function onCellClick(evt: MouseEvent) {
 
 .cell-move {
   background-color: #499814;
+}
+
+.cell-win {
+  background-color: #317105
 }
 </style>
