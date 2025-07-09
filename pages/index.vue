@@ -67,5 +67,9 @@ function onNextPuzzle() {
       </div>
     </UContainer>
     <PuzzleMap v-bind="mapProps" class="mx-auto my-4" @puzzle-completed="onPuzzleCompleted" />
+    <div class="my-2 flex gap-2 justify-center">
+        <UButton icon="i-lucide-github" size="md" to="https://github.com/verdie-g/dofus-puzzles" target="_blank" color="neutral">GitHub</UButton>
+        <UButton icon="i-lucide-hammer" size="md" color="primary" to="builder">Créer un puzzle</UButton>
+      </div>
   </div>
 </template>
