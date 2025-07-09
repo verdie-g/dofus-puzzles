@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { MapEntityType } from '@/models/puzzle';
-import type { Puzzle } from '@/models/puzzle';
+import type { Puzzle, PuzzleResult } from '@/models/puzzle';
 
 const puzzle: Puzzle = {
   name: 'test',
@@ -14,6 +14,45 @@ const puzzle: Puzzle = {
     { cellId: 289, type: MapEntityType.Obstacle },
   ],
 };
+
+const puzzleResult: Ref<PuzzleResult | null> = ref(null);
+const playing: Ref<boolean> = ref(true);
+
+// TODO: how to type that?
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const mapProps: Ref<any> = ref({
+  puzzle,
+  showLineOfSight: false,
+  showWinningCells: false,
+  showMovement: true,
+  highlightCell: null,
+});
+
+function onPuzzleCompleted(r: PuzzleResult) {
+  if (!playing.value) {
+    return;
+  }
+
+  playing.value = false;
+  puzzleResult.value = r;
+  mapProps.value.showLineOfSight = true;
+  mapProps.value.showWinningCells = true;
+  mapProps.value.showMovement = false;
+  mapProps.value.highlightCell = r.cellId;
+}
+
+function onNextPuzzle() {
+  if (playing.value) {
+    return;
+  }
+
+  playing.value = true;
+  puzzleResult.value = null;
+  mapProps.value.showLineOfSight = false;
+  mapProps.value.showWinningCells = false;
+  mapProps.value.showMovement = true;
+  mapProps.value.highlightCell = null;
+}
 </script>
 
 <template>
@@ -23,11 +62,10 @@ const puzzle: Puzzle = {
         Déplacez-<span class="text-[#15518F]">vous</span> sur la position la plus proche pour avoir l'<span class="text-[#eb2b2b]">ennemi</span>
         en ligne de mire sans être gêné par les <span class="text-[#60314f]">obstacles</span>.
       </p>
-      <div class="my-2 flex justify-center">
-        <UButton trailing-icon="i-lucide-arrow-right" size="md" color="success">Suivant</UButton>
-        <UButton trailing-icon="i-lucide-undo-2" size="md" color="error">Retry</UButton>
+      <div class="my-2 flex justify-center" :class="{ invisible: playing }">
+        <UButton trailing-icon="i-lucide-arrow-right" size="md" :color="puzzleResult?.success ? 'success' : 'error'" @click="onNextPuzzle">Suivant</UButton>
       </div>
     </UContainer>
-    <PuzzleMap :puzzle="puzzle" :show-line-of-sight="true" :show-winning-cells="true" class="mx-auto my-4" @puzzle-completed="(x) => console.log(x)" />
+    <PuzzleMap v-bind="mapProps" class="mx-auto my-4" @puzzle-completed="onPuzzleCompleted" />
   </div>
 </template>

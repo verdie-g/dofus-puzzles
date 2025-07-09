@@ -16,3 +16,8 @@ export enum MapEntityType {
     Enemy,
     Obstacle,
 }
+
+export interface PuzzleResult {
+    success: boolean;
+    cellId: number;
+}

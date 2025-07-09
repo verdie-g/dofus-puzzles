@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Cell } from '@/models/map';
 import {  MapEntityType } from '@/models/puzzle';
-import type {Puzzle} from '@/models/puzzle';
+import type { Puzzle, PuzzleResult } from '@/models/puzzle';
 import { MAP_HORIZONTAL_CELLS_COUNT, MAP_VERTICAL_CELLS_COUNT } from '@/services/map-service';
 import { resolveLineOfSight, findShortestPath, findWinningCells} from '@/services/puzzle-service';
 
@@ -9,12 +9,14 @@ interface Props {
   puzzle: Puzzle;
   showLineOfSight: boolean;
   showWinningCells: boolean;
+  showMovement: boolean;
+  highlightCell: number | null;
 }
 
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  puzzleCompleted: [puzzleResult: string]
+  puzzleCompleted: [puzzleResult: PuzzleResult]
 }>();
 
 const hoveredCellId: Ref<number | null> = ref(null);
@@ -142,14 +144,12 @@ function onCellClick(evt: MouseEvent) {
     return;
   }
 
-  let puzzleResult;
-  if (winningCells.value.includes(targetCellId)) {
-    puzzleResult = 'WON';
-  } else {
-    puzzleResult = 'LOST';
-  }
+  const result = {
+    success: winningCells.value.includes(targetCellId),
+    cellId: targetCellId,
+  };
 
-  emit('puzzleCompleted', puzzleResult);
+  emit('puzzleCompleted', result);
 }
 </script>
 
@@ -175,8 +175,9 @@ v-for="(cell, cellId) in props.puzzle.map.cells"
         <div v-if="cellHasEntityType(cellId, MapEntityType.Ally)" class="cell-ally"/>
         <div v-else-if="cellHasEntityType(cellId, MapEntityType.Obstacle)" class="cell-obstacle"/>
         <div v-else-if="cellHasEntityType(cellId, MapEntityType.Enemy)" class="cell-enemy"/>
-        <div v-else-if="movementPath?.has(cellId)" class="cell-move"/>
-        <div v-else-if="props.showWinningCells && winningCells.includes(cellId)" class="cell-win"/>
+        <div v-else-if="props.showMovement && movementPath?.has(cellId)" class="cell-move"/>
+        <div v-else-if="(props.highlightCell === cellId || props.showWinningCells) && winningCells.includes(cellId)" class="cell-win"/>
+        <div v-else-if="props.highlightCell === cellId && !winningCells.includes(cellId)" class="cell-lose"/>
         <div v-else-if="hoveredCellId === cellId" class="cell-hovered"/>
       </div>
     </div>
@@ -249,7 +250,8 @@ v-for="(cell, cellId) in props.puzzle.map.cells"
 .cell-enemy,
 .cell-obstacle,
 .cell-move,
-.cell-win {
+.cell-win,
+.cell-lose {
   width: 100%;
   height: 100%;
   /* Prevents flickering on hover */
@@ -285,5 +287,9 @@ v-for="(cell, cellId) in props.puzzle.map.cells"
 
 .cell-win {
   background-color: var(--ui-success);
+}
+
+.cell-lose {
+  background-color: var(--ui-error);
 }
 </style>
