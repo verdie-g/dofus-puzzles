@@ -76,14 +76,18 @@ export function isCellAccessible(cellId: number, puzzle: Puzzle) {
 }
 
 export function findWinningCells(maxMovementPoints: number, puzzle: Puzzle) {
-    const allyCellId = puzzle.entities.find(e => e.type == MapEntityType.Ally)!.cellId;
-    const enemyCellId = puzzle.entities.find(e => e.type == MapEntityType.Enemy)!.cellId;
-    const enemyLineOfSight = resolveLineOfSight(enemyCellId, puzzle);
+    const ally = puzzle.entities.find(e => e.type == MapEntityType.Ally);
+    const enemy = puzzle.entities.find(e => e.type == MapEntityType.Enemy);
+    if (ally === undefined || enemy === undefined) {
+        return [];
+    }
+
+    const enemyLineOfSight = resolveLineOfSight(enemy.cellId, puzzle);
 
     const winningCells = [];
     let winningCellsDistance = -1;
     for (const cellId of enemyLineOfSight) {
-        const path = findShortestPath(allyCellId, cellId, puzzle);
+        const path = findShortestPath(ally.cellId, cellId, puzzle);
         if (path === null) {
             continue;
         }

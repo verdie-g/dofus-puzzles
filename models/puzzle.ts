@@ -1,7 +1,7 @@
 import type { Map } from '@/models/map';
 
 export interface Puzzle {
-    name: string;
+    id: number;
     map: Map;
     entities: MapEntity[];
 }

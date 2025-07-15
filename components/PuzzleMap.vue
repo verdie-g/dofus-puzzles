@@ -16,7 +16,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const emit = defineEmits<{
-  puzzleCompleted: [puzzleResult: PuzzleResult]
+  cellClick: [cellId: number],
+  puzzleCompleted: [puzzleResult: PuzzleResult],
 }>();
 
 const hoveredCellId: Ref<number | null> = ref(null);
@@ -110,7 +111,8 @@ function resolveCellPositionStyle(cellId: number) {
 }
 
 function cellHasEntityType(cellId: number, type: MapEntityType) {
-  return props.puzzle.entities.find(e => e.cellId === cellId && e.type === type);
+  const entity = props.puzzle.entities.find(e => e.cellId === cellId);
+  return entity !== undefined && entity.type === type;
 }
 
 function getCellIdFromMouseEvent(evt: MouseEvent) {
@@ -120,11 +122,18 @@ function getCellIdFromMouseEvent(evt: MouseEvent) {
 
 function onCellOverEnter(evt: MouseEvent) {
   const cellId = getCellIdFromMouseEvent(evt);
-  hoveredCellId.value = cellId;
-  hoveredCellLineOfSight.value = new Set(resolveLineOfSight(cellId, props.puzzle));
 
-  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0]!.cellId;
-  const path = findShortestPath(allyCellId, cellId, props.puzzle);
+  if (props.puzzle.map.cells[cellId] === Cell.Floor) {
+    hoveredCellId.value = cellId;
+    hoveredCellLineOfSight.value = new Set(resolveLineOfSight(cellId, props.puzzle));
+  }
+
+  const ally = props.puzzle.entities.find(e => e.type == MapEntityType.Ally);
+  if (ally === undefined) {
+    return;
+  }
+
+  const path = findShortestPath(ally.cellId, cellId, props.puzzle);
   movementPath.value = path === null || path.length > movementPoints ? null : new Set(path);
 }
 
@@ -137,19 +146,23 @@ function onCellOverLeave(_: MouseEvent) {
 function onCellClick(evt: MouseEvent) {
   const targetCellId = getCellIdFromMouseEvent(evt);
 
-  const allyCellId = props.puzzle.entities.filter(e => e.type == MapEntityType.Ally)[0]!.cellId;
-  const path = findShortestPath(allyCellId, targetCellId, props.puzzle);
+  emit('cellClick', targetCellId);
+
+  const ally = props.puzzle.entities.find(e => e.type == MapEntityType.Ally);
+  if (ally === undefined) {
+    return;
+  }
+
+  const path = findShortestPath(ally.cellId, targetCellId, props.puzzle);
   if (path === null || path.length > movementPoints) {
     // Don't make the player lose for a click on an unreachable cells.
     return;
   }
 
-  const result = {
+  emit('puzzleCompleted', {
     success: winningCells.value.includes(targetCellId),
     cellId: targetCellId,
-  };
-
-  emit('puzzleCompleted', result);
+  });
 }
 </script>
 
