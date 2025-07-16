@@ -146,6 +146,10 @@ function onCellOverLeave(_: MouseEvent) {
 function onCellClick(evt: MouseEvent) {
   const targetCellId = getCellIdFromMouseEvent(evt);
 
+  if (props.puzzle.map.cells[targetCellId] !== Cell.Floor) {
+    return;
+  }
+
   emit('cellClick', targetCellId);
 
   const ally = props.puzzle.entities.find(e => e.type == MapEntityType.Ally);
