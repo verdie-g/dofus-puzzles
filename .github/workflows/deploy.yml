@@ -29,8 +29,6 @@ jobs:
 
       - name: Generate static site
         run: npm run generate
-        env:
-          NUXT_APP_BASE_URL: /dofus-puzzles/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
