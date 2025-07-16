@@ -4,6 +4,8 @@ import type { Puzzle } from '~/models/puzzle';
 import { getMaps } from '~/services/map-repository';
 import { encodePuzzle } from '~/services/puzzle-encoder';
 
+const toast = useToast();
+
 const maps = getMaps();
 
 const puzzle: Ref<Puzzle> = ref({
@@ -20,6 +22,27 @@ function placeEntity(entityType: MapEntityType) {
 
 function clear() {
     puzzle.value.entities = [];
+}
+
+async function copyPuzzleCodeToClipboard() {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const result = await navigator.permissions.query({ name: 'clipboard-write' as any });
+    if (result.state === "granted" || result.state === "prompt") {
+         await navigator.clipboard.writeText(puzzleCode.value);
+         toast.add({
+            title: 'Le puzzle encodé a été copié dans le presse-papiers !',
+            color: 'success',
+            icon: 'i-lucide-clipboard-copy',
+            duration: 4000,
+         });
+    } else {
+        toast.add({
+            title: 'Impossile de copier le puzzle encodé dans le presse-papiers !',
+            color: 'error',
+            icon: 'i-lucide-clipboard-copy',
+            duration: 4000,
+         });
+    }
 }
 
 function onCellClick(cellId: number) {
@@ -72,7 +95,7 @@ function mapEntityTypeToString(type: MapEntityType | null) {
             <div class="my-4 flex justify-center">
                 <UButtonGroup>
                     <UInput v-model="puzzleCode" color="neutral" variant="outline" readonly class="w-md" />
-                    <UButton color="neutral" variant="subtle" icon="i-lucide-clipboard" />
+                    <UButton color="neutral" variant="subtle" icon="i-lucide-clipboard" @click="copyPuzzleCodeToClipboard" />
                 </UButtonGroup>
             </div>
             <p class="flex justify-center" :class="{ invisible: placingEntityType === null }">
