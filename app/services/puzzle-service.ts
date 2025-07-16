@@ -4,7 +4,7 @@ import { MAP_CELLS_COUNT, MAP_HORIZONTAL_CELLS_COUNT, isPointInMap, isValidCellI
 import { Cell } from '~/models/map';
 import type { MapPoint } from '~/models/map';
 
-export function resolveLineOfSight(refCellId: number, puzzle: Puzzle) : number[] {
+export function resolveLineOfSight(refCellId: number, puzzle: Puzzle, ignoreAllies: boolean) : number[] {
     const refPos = mapPointFromCellId(refCellId);
 
     const allCellIds = Array.from(Array(MAP_CELLS_COUNT).keys())
@@ -42,7 +42,7 @@ export function resolveLineOfSight(refCellId: number, puzzle: Puzzle) : number[]
 
             if (
                 i > 0 &&
-                puzzle.entities.find(e => e.cellId === line[i - 1]!.cellId) !== undefined
+                !isCellSightable(line[i - 1]!.cellId, puzzle, ignoreAllies)
             ) {
                 los = false;
             } else if (
@@ -70,11 +70,6 @@ export function resolveLineOfSight(refCellId: number, puzzle: Puzzle) : number[]
     return result;
 }
 
-export function isCellAccessible(cellId: number, puzzle: Puzzle) {
-    return puzzle.map.cells[cellId] === Cell.Floor
-        && puzzle.entities.find(e => e.cellId === cellId) === undefined;
-}
-
 export function findWinningCells(maxMovementPoints: number, puzzle: Puzzle) {
     const ally = puzzle.entities.find(e => e.type == MapEntityType.Ally);
     const enemy = puzzle.entities.find(e => e.type == MapEntityType.Enemy);
@@ -82,7 +77,7 @@ export function findWinningCells(maxMovementPoints: number, puzzle: Puzzle) {
         return [];
     }
 
-    const enemyLineOfSight = resolveLineOfSight(enemy.cellId, puzzle);
+    const enemyLineOfSight = resolveLineOfSight(enemy.cellId, puzzle, true);
 
     const winningCells = [];
     let winningCellsDistance = -1;
@@ -144,7 +139,7 @@ function findShortestPathRec(fromPoint: MapPoint, toPoint: MapPoint, puzzle: Puz
         for (const neighbor of neighbors) {
             if (visited.has(neighbor.cellId)
              || !isPointInMap(neighbor)
-             || !isCellAccessible(neighbor.cellId, puzzle)) {
+             || !isCellMovable(neighbor.cellId, puzzle)) {
                 continue;
             }
 
@@ -154,8 +149,18 @@ function findShortestPathRec(fromPoint: MapPoint, toPoint: MapPoint, puzzle: Puz
     }
 
     return null;
+
 }
 
+function isCellSightable(cellId: number, puzzle: Puzzle, ignoreAllies: boolean) {
+    const entity = puzzle.entities.find(e => e.cellId === cellId);
+    return entity === undefined || (ignoreAllies && entity.type === MapEntityType.Ally);
+}
+
+function isCellMovable(cellId: number, puzzle: Puzzle) {
+    return puzzle.map.cells[cellId] === Cell.Floor
+        && puzzle.entities.find(e => e.cellId === cellId) === undefined;
+}
 
 // Bresenham's line algorithm.
 function getPointsBetween(startCellId: number, endCellId: number): MapPoint[] {

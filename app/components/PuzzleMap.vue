@@ -125,7 +125,7 @@ function onCellOverEnter(evt: MouseEvent) {
 
   if (props.puzzle.map.cells[cellId] === Cell.Floor) {
     hoveredCellId.value = cellId;
-    hoveredCellLineOfSight.value = new Set(resolveLineOfSight(cellId, props.puzzle));
+    hoveredCellLineOfSight.value = new Set(resolveLineOfSight(cellId, props.puzzle, true));
   }
 
   const ally = props.puzzle.entities.find(e => e.type == MapEntityType.Ally);
