@@ -43,6 +43,8 @@ async function copyPuzzleCodeToClipboard() {
             duration: 4000,
          });
     }
+
+    unami.track('puzzle-built-copied');
 }
 
 function onCellClick(cellId: number) {

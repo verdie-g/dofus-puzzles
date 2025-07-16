@@ -24,6 +24,11 @@ function onPuzzleCompleted(r: PuzzleResult) {
     return;
   }
 
+  unami.track('puzzle-completed', {
+    puzzleId: puzzle.value.id,
+    success: r.success,
+  });
+
   playing.value = false;
   puzzleResult.value = r;
   mapProps.value.showLineOfSight = true;

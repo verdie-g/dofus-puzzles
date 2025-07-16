@@ -25,6 +25,9 @@ export default defineNuxtConfig({
   ssr: false,
   typescript: {
     typeCheck: true,
+    tsConfig: {
+      include: ['types']
+    }
   },
   modules: [
     '@nuxt/ui',
