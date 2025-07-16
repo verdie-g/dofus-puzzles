@@ -12,6 +12,13 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'fr',
       },
+      script: [
+        {
+          src: 'https://cloud.umami.is/script.js',
+          defer: true,
+          'data-website-id': '19ae7c03-6f5a-4635-8e3b-730e7fc36e5d',
+        },
+      ],
     },
   },
   devtools: { enabled: true },
