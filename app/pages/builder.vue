@@ -96,6 +96,7 @@ function mapEntityTypeToString(type: MapEntityType | null) {
                 <UButtonGroup>
                     <UInput v-model="puzzleCode" color="neutral" variant="outline" readonly class="w-md" />
                     <UButton color="neutral" variant="subtle" icon="i-lucide-clipboard" @click="copyPuzzleCodeToClipboard" />
+                    <UButton icon="i-lucide-github" size="md" to="https://github.com/verdie-g/dofus-puzzles/blob/main/app/data/puzzles.json" target="_blank" color="neutral">PR</UButton>
                 </UButtonGroup>
             </div>
             <p class="flex justify-center" :class="{ invisible: placingEntityType === null }">
