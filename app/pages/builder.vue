@@ -4,6 +4,11 @@ import type { Puzzle } from '~/models/puzzle';
 import { getMaps } from '~/services/map-repository';
 import { encodePuzzle } from '~/services/puzzle-encoder';
 
+useSeoMeta({
+  title: 'Dofus Puzzles : Créer votre Puzzle',
+  description: 'Créez votre propre puzzle Dofus et ajoutez-le sur GitHub pour qu’il soit jouable par tous',
+})
+
 const toast = useToast();
 
 const maps = getMaps();
