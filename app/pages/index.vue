@@ -24,7 +24,7 @@ function onPuzzleCompleted(r: PuzzleResult) {
     return;
   }
 
-  unami.track('puzzle-completed', {
+  umami.track('puzzle-completed', {
     puzzleId: puzzle.value.id,
     success: r.success,
   });

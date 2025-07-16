@@ -1,5 +1,5 @@
 export {};
 
 declare global {
-  var unami: any;
+  var umami: any;
 }

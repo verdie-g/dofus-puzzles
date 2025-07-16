@@ -16,7 +16,8 @@ export default defineNuxtConfig({
         {
           src: 'https://cloud.umami.is/script.js',
           defer: true,
-          'data-website-id': '19ae7c03-6f5a-4635-8e3b-730e7fc36e5d',
+          'data-website-id': '55c64c6b-9dcd-4e53-bb9c-dac866675ab4',
+          'data-domains': 'dofuspuzzles.com',
         },
       ],
     },
