@@ -57,7 +57,7 @@ function onNextPuzzle() {
 <template>
   <div>
     <UContainer>
-      <p class="text-xl text-center">
+      <p class="mt-2 text-xl text-center">
         Déplacez-<span class="text-[#15518F]">vous</span> sur la position la plus proche pour avoir l'<span class="text-[#eb2b2b]">ennemi</span>
         en ligne de mire sans être gêné par les <span class="text-[#60314f]">obstacles</span>.
       </p>
