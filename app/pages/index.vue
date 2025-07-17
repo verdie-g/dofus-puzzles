@@ -24,10 +24,12 @@ function onPuzzleCompleted(r: PuzzleResult) {
     return;
   }
 
-  umami.track('puzzle-completed', {
-    puzzleId: puzzle.value.id,
-    success: r.success,
-  });
+  try {
+    umami.track('puzzle-completed', {
+      puzzleId: puzzle.value.id,
+      success: r.success,
+    });
+  } catch {}
 
   playing.value = false;
   puzzleResult.value = r;

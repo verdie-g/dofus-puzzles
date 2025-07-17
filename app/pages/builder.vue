@@ -49,7 +49,9 @@ async function copyPuzzleCodeToClipboard() {
          });
     }
 
-    umami.track('puzzle-built-copied');
+    try {
+        umami.track('puzzle-built-copied');
+    } catch {}
 }
 
 function onCellClick(cellId: number) {
