@@ -12,6 +12,18 @@ export default defineNuxtConfig({
       htmlAttrs: {
         lang: 'fr',
       },
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/png',
+          href: '/favicon-96x96.png',
+          sizes: '96x96',
+        },
+        {
+            rel: 'shortcut icon',
+            href: '/favicon.ico',
+        },
+      ],
       script: [
         {
           src: 'https://cloud.umami.is/script.js',
