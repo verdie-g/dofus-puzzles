@@ -13,9 +13,6 @@ export default defineNuxtConfig({
           content: 'https://repository-images.githubusercontent.com/1014005458/b310e68e-c3cd-48f2-ac1b-22252cc1009b',
         },
       ],
-      htmlAttrs: {
-        lang: 'fr',
-      },
       link: [
         {
           rel: 'icon',
@@ -48,10 +45,19 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxt/ui',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    '@nuxtjs/i18n',
   ],
   css: ['~/assets/css/main.css'],
   future: {
     compatibilityVersion: 4
+  },
+  i18n: {
+    defaultLocale: 'en',
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'fr', name: 'Français', file: 'fr.json' },
+    ],
+    strategy: 'no_prefix',
   },
 });

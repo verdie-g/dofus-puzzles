@@ -64,18 +64,25 @@ function onNextPuzzle() {
 <template>
   <div>
     <UContainer>
-      <p class="mt-2 text-xl text-center">
-        Déplacez-<span class="text-[#15518F]">vous</span> sur la position la plus proche pour avoir l'<span class="text-[#eb2b2b]">ennemi</span>
-        en ligne de mire sans être gêné par les <span class="text-[#60314f]">obstacles</span>.
-      </p>
+      <i18n-t keypath="puzzle.rules.main" tag="p" class="mt-2 text-xl text-center">
+        <template #ally>
+          <span class="text-[#15518F]">{{ $t('puzzle.rules.you') }}</span>
+        </template>
+        <template #enemy>
+          <span class="text-[#eb2b2b]">{{ $t('puzzle.rules.enemy') }}</span>
+        </template>
+        <template #obstacles>
+          <span class="text-[#60314f]">{{ $t('puzzle.rules.obstacles') }}</span>
+        </template>
+      </i18n-t>
       <div class="my-2 flex justify-center" :class="{ invisible: playing }">
-        <UButton trailing-icon="i-lucide-arrow-right" size="md" :color="puzzleResult?.success ? 'success' : 'error'" @click="onNextPuzzle">Suivant</UButton>
+        <UButton trailing-icon="i-lucide-arrow-right" size="md" :color="puzzleResult?.success ? 'success' : 'error'" @click="onNextPuzzle">{{ $t('puzzle.next') }}</UButton>
       </div>
     </UContainer>
     <PuzzleMap v-bind="mapProps" class="mx-auto my-4" @puzzle-completed="onPuzzleCompleted" />
     <div class="my-2 flex gap-2 justify-center">
         <UButton icon="i-lucide-github" size="md" to="https://github.com/verdie-g/dofus-puzzles" target="_blank" color="neutral">GitHub</UButton>
-        <UButton icon="i-lucide-hammer" size="md" color="primary" to="builder">Créer un puzzle</UButton>
+        <UButton icon="i-lucide-hammer" size="md" color="primary" to="builder">{{ $t('puzzle.createPuzzle') }}</UButton>
       </div>
   </div>
 </template>

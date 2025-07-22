@@ -1,0 +1,26 @@
+{
+  "puzzle": {
+    "rules": {
+      "main": "Move {ally} to the closest position to get the {enemy} in line of sight without being blocked by {obstacles}.",
+      "you": "your character",
+      "enemy": "enemy",
+      "obstacles": "obstacles"
+    },
+    "next": "Next",
+    "createPuzzle": "Create a puzzle"
+  },
+  "builder": {
+    "placeAlly": "Place Ally",
+    "placeEnemy": "Place Enemy",
+    "placeObstacle": "Place Obstacle",
+    "clear": "Clear",
+    "placing": "Click on a cell to place the {type}",
+    "mapEntityType": {
+      "Ally": "ally",
+      "Enemy": "enemy",
+      "Obstacle": "obstacle"
+    },
+    "puzzleCopySuccess": "The encoded puzzle was copied!",
+    "puzzleCopyFailure": "Unable to copy the encoded puzzle!"
+  }
+}

@@ -3,11 +3,14 @@ import { MapEntityType  } from '~/models/puzzle';
 import type { Puzzle } from '~/models/puzzle';
 import { getMaps } from '~/services/map-repository';
 import { encodePuzzle } from '~/services/puzzle-encoder';
+import { useI18n } from 'vue-i18n'
 
 useSeoMeta({
   title: 'Dofus Puzzles : Créer votre Puzzle',
   description: 'Créez votre propre puzzle Dofus et ajoutez-le sur GitHub pour qu’il soit jouable par tous',
-})
+});
+
+const { t } = useI18n()
 
 const toast = useToast();
 
@@ -35,14 +38,14 @@ async function copyPuzzleCodeToClipboard() {
     if (result.state === "granted" || result.state === "prompt") {
          await navigator.clipboard.writeText(puzzleCode.value);
          toast.add({
-            title: 'Le puzzle encodé a été copié dans le presse-papiers !',
+            title: t('builder.puzzleCopySuccess'),
             color: 'success',
             icon: 'i-lucide-clipboard-copy',
             duration: 4000,
          });
     } else {
         toast.add({
-            title: 'Impossile de copier le puzzle encodé dans le presse-papiers !',
+            title: $t('builder.puzzleCopyFailure'),
             color: 'error',
             icon: 'i-lucide-clipboard-copy',
             duration: 4000,
@@ -78,16 +81,9 @@ function onCellClick(cellId: number) {
 }
 
 function mapEntityTypeToString(type: MapEntityType | null) {
-    switch (type) {
-        case MapEntityType.Ally:
-            return 'allié';
-        case MapEntityType.Enemy:
-            return 'enemi';
-        case MapEntityType.Obstacle:
-            return 'obstacle';
-        default:
-            return '';
-    }
+    return type === null
+        ? ''
+        : t(`builder.mapEntityType.${MapEntityType[type]}`);
 }
 </script>
 
@@ -95,10 +91,10 @@ function mapEntityTypeToString(type: MapEntityType | null) {
     <div>
         <UContainer class="mt-3">
             <div class="flex gap-2 justify-center">
-                <UButton size="md" color="neutral" @click="placeEntity(0)">Placer Allié</UButton>
-                <UButton size="md" color="neutral" @click="placeEntity(1)">Placer Ennemi</UButton>
-                <UButton size="md" color="neutral" @click="placeEntity(2)">Placer Obstacle</UButton>
-                <UButton size="md" color="neutral" @click="clear">Tout Effacer</UButton>
+                <UButton size="md" color="neutral" @click="placeEntity(0)">{{ $t('builder.placeAlly') }}</UButton>
+                <UButton size="md" color="neutral" @click="placeEntity(1)">{{ $t('builder.placeEnemy') }}</UButton>
+                <UButton size="md" color="neutral" @click="placeEntity(2)">{{ $t('builder.placeObstacle') }}</UButton>
+                <UButton size="md" color="neutral" @click="clear">{{ $t('builder.clear') }}</UButton>
                 <USelectMenu v-model="puzzle.map" size="md" :items="maps" label-key="name" @change="clear" />
             </div>
             <div class="my-4 flex justify-center">
@@ -109,7 +105,7 @@ function mapEntityTypeToString(type: MapEntityType | null) {
                 </UButtonGroup>
             </div>
             <p class="flex justify-center" :class="{ invisible: placingEntityType === null }">
-                Cliquez sur une cellule pour placer l'{{ mapEntityTypeToString(placingEntityType) }}
+                {{ $t('builder.placing', { type: mapEntityTypeToString(placingEntityType) }) }}
             </p>
         </UContainer>
         <PuzzleMap :puzzle="puzzle" :show-line-of-sight="true" :show-winning-cells="true" :show-movement="false" :highlight-cell="null" class="mx-auto my-4" @cell-click="onCellClick" />

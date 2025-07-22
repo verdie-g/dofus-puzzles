@@ -1,0 +1,26 @@
+{
+  "puzzle": {
+    "rules": {
+      "main": "Déplacez-{ally} sur la position la plus proche pour avoir l'{enemy} en ligne de mire sans être gêné par les {obstacles}.",
+      "you": "vous",
+      "enemy": "enemi",
+      "obstacles": "obstacles"
+    },
+    "next": "Suivant",
+    "createPuzzle": "Créer un puzzle"
+  },
+  "builder": {
+    "placeAlly": "Placer Allié",
+    "placeEnemy": "Placer Ennemi",
+    "placeObstacle": "Placer Obstacle",
+    "clear": "Tout Effacer",
+    "placing": "Cliquez sur une cellule pour placer l'{type}",
+    "mapEntityType": {
+      "Ally": "allié",
+      "Enemy": "enemi",
+      "Obstacle": "obstacle"
+    },
+    "puzzleCopySuccess": "Le puzzle encodé a été copié dans le presse-papiers !",
+    "puzzleCopyFailure": "Impossile de copier le puzzle encodé dans le presse-papiers !"
+  }
+}
