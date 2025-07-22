@@ -60,4 +60,7 @@ export default defineNuxtConfig({
     ],
     strategy: 'no_prefix',
   },
+  colorMode: {
+    preference: 'dark',
+  },
 });
