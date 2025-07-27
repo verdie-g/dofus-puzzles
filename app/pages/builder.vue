@@ -5,12 +5,14 @@ import { getMaps } from '~/services/map-repository';
 import { encodePuzzle } from '~/services/puzzle-encoder';
 import { useI18n } from 'vue-i18n'
 
-useSeoMeta({
-  title: 'Dofus Puzzles : Créer votre Puzzle',
-  description: 'Créez votre propre puzzle Dofus et ajoutez-le sur GitHub pour qu’il soit jouable par tous',
-});
+const { t } = useI18n();
 
-const { t } = useI18n()
+useSeoMeta({
+  title: t('seo.builder.title'),
+  ogTitle: t('seo.builder.title'),
+  description: t('seo.builder.description'),
+  ogDescription: t('seo.builder.description'),
+});
 
 const toast = useToast();
 

@@ -22,5 +22,15 @@
     },
     "puzzleCopySuccess": "The encoded puzzle was copied!",
     "puzzleCopyFailure": "Unable to copy the encoded puzzle!"
+  },
+  "seo": {
+    "index": {
+      "title": "Dofus Puzzles",
+      "description": "Dofus Puzzles trains your tactical positioning: find the best move to place an enemy in your line of sight."
+    },
+    "builder": {
+      "title": "Dofus Puzzles: Create Your Puzzle",
+      "description": "Create your own Dofus puzzle and add it to GitHub so everyone can play it."
+    }
   }
 }

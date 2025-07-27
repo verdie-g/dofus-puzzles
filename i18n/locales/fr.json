@@ -22,5 +22,15 @@
     },
     "puzzleCopySuccess": "Le puzzle encodé a été copié dans le presse-papiers !",
     "puzzleCopyFailure": "Impossile de copier le puzzle encodé dans le presse-papiers !"
+  },
+  "seo": {
+    "index": {
+      "title": "Dofus Puzzles",
+      "description": "Dofus Puzzles entraîne votre placement tactique : trouvez le meilleur déplacement pour placer un ennemi dans votre ligne de mire."
+    },
+    "builder": {
+      "title": "Dofus Puzzles : Créer votre Puzzle",
+      "description": "Créez votre propre puzzle Dofus et ajoutez-le sur GitHub pour qu'il soit jouable par tous"
+    }
   }
 }

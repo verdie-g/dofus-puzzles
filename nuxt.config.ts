@@ -2,12 +2,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-27',
   app: {
     head: {
-      title: 'Dofus Puzzles',
       meta: [
-        {
-          name: 'description',
-          content: 'Dofus Puzzles entraîne votre placement tactique : trouvez le meilleur déplacement pour placer un ennemi dans votre ligne de mire.',
-        },
         {
           property: 'og:image',
           content: 'https://repository-images.githubusercontent.com/1014005458/b310e68e-c3cd-48f2-ac1b-22252cc1009b',

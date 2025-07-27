@@ -2,6 +2,15 @@
 import type { Puzzle, PuzzleResult } from '@/models/puzzle';
 import { getPuzzles } from '~/services/puzzle-repository';
 
+const { t } = useI18n();
+
+useSeoMeta({
+  title: t('seo.builder.title'),
+  ogTitle: t('seo.builder.title'),
+  description: t('seo.builder.description'),
+  ogDescription: t('seo.builder.description'),
+});
+
 const puzzles = getPuzzles();
 arrayShuffle(puzzles);
 
