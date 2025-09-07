@@ -5,10 +5,10 @@ import { getPuzzles } from '~/services/puzzle-repository';
 const { t } = useI18n();
 
 useSeoMeta({
-  title: t('seo.builder.title'),
-  ogTitle: t('seo.builder.title'),
-  description: t('seo.builder.description'),
-  ogDescription: t('seo.builder.description'),
+  title: t('seo.index.title'),
+  ogTitle: t('seo.index.title'),
+  description: t('seo.index.description'),
+  ogDescription: t('seo.index.description'),
 });
 
 const puzzles = getPuzzles();
