@@ -9,6 +9,35 @@
     "next": "Next",
     "createPuzzle": "Create a puzzle"
   },
+  "rushMode": {
+    "title": "RUSH MODE",
+    "startButton": "🔥 Start Rush Mode",
+    "exitButton": "Exit",
+    "gameOver": "GAME OVER",
+    "playAgain": "Play Again",
+    "backToMenu": "Back to Menu",
+    "selectMode": "Select Game Mode",
+    "score": "Score",
+    "streak": "Streak",
+    "lives": "Lives",
+    "time": "Time",
+    "elapsed": "Time",
+    "correct": "Correct",
+    "wrong": "Wrong",
+    "bestStreak": "Best Streak",
+    "modes": {
+      "1min": "1 Minute",
+      "3min": "3 Minutes",
+      "5min": "5 Minutes",
+      "survive": "Survive"
+    },
+    "modeDescriptions": {
+      "1min": "Fast-paced challenge! Beat the clock in 60 seconds.",
+      "3min": "Balanced mode with 3 minutes to prove yourself.",
+      "5min": "Extended challenge for maximum points.",
+      "survive": "No time limit! How long can you last with 3 lives?"
+    }
+  },
   "builder": {
     "placeAlly": "Place Ally",
     "placeEnemy": "Place Enemy",

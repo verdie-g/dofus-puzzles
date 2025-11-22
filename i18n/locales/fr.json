@@ -9,6 +9,35 @@
     "next": "Suivant",
     "createPuzzle": "Créer un puzzle"
   },
+  "rushMode": {
+    "title": "MODE RUSH",
+    "startButton": "🔥 Démarrer le Mode Rush",
+    "exitButton": "Quitter",
+    "gameOver": "PARTIE TERMINÉE",
+    "playAgain": "Rejouer",
+    "backToMenu": "Retour au Menu",
+    "selectMode": "Sélectionner le Mode de Jeu",
+    "score": "Score",
+    "streak": "Série",
+    "lives": "Vies",
+    "time": "Temps",
+    "elapsed": "Temps",
+    "correct": "Correct",
+    "wrong": "Faux",
+    "bestStreak": "Meilleure Série",
+    "modes": {
+      "1min": "1 Minute",
+      "3min": "3 Minutes",
+      "5min": "5 Minutes",
+      "survive": "Survie"
+    },
+    "modeDescriptions": {
+      "1min": "Défi rapide ! Battez le chrono en 60 secondes.",
+      "3min": "Mode équilibré avec 3 minutes pour vous prouver.",
+      "5min": "Défi prolongé pour un maximum de points.",
+      "survive": "Pas de limite de temps ! Combien de temps tiendrez-vous avec 3 vies ?"
+    }
+  },
   "builder": {
     "placeAlly": "Placer Allié",
     "placeEnemy": "Placer Ennemi",
